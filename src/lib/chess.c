@@ -678,6 +678,74 @@ is_valid_castle(ChessBoard* p_board, ChessCoordinate end_coords)
 }
 
 
+ChessPieceColour
+is_checkmate(ChessBoard* p_board)
+{
+    ChessCoordinate king_coordinate = p_board->white_to_move? 
+                    p_board->white_king_coordinate: 
+                    p_board->black_king_coordinate;
+
+    ChessPieceColour king_colour = fetch_coordinate(p_board, king_coordinate)->colour;
+
+
+    p_board->white_to_move = !p_board->white_to_move;
+
+    if (!in_illegal_check(p_board))
+    {
+        p_board->white_to_move = !p_board->white_to_move;
+        return colourNONE;
+    }
+
+    ChessCoordinate prev_coordinate = king_coordinate;
+
+    for (ChessRank rank = king_coordinate.rank - 1; 
+                        rank <= king_coordinate.rank + 1; ++rank)
+    {
+        for (ChessFile file = king_coordinate.file - 1; 
+                        file <= king_coordinate.file + 1; ++file)
+        {
+            ChessCoordinate dest_coordinate = (ChessCoordinate){file, rank};
+            ChessPiece* p_piece = fetch_coordinate(
+                            p_board, dest_coordinate);
+
+            if (p_piece == NULL || p_piece->colour == king_colour)
+            {
+                continue;
+            }
+            
+            // Simulate the move
+            ChessPiece temp_piece = *p_piece;
+            raw_move_piece(p_board, prev_coordinate, dest_coordinate);
+
+            bool illegal_check = in_illegal_check(p_board);
+
+            raw_move_piece(p_board, dest_coordinate, prev_coordinate);
+            *p_piece = temp_piece;
+
+            if (!illegal_check)
+            {
+                p_board->white_to_move = !p_board->white_to_move;
+                return colourNONE;
+            }
+            
+            prev_coordinate = dest_coordinate;
+        }
+    }
+
+    p_board->white_to_move = !p_board->white_to_move;
+
+    if (king_colour == kWhite)
+    {
+        return kBlack;
+    }
+    else
+    {
+        return kWhite;
+    }
+    
+}
+
+
 bool
 hor_ver_check(ChessBoard* p_board)
 {
@@ -1324,7 +1392,7 @@ move_piece(ChessBoard* p_board,
         *end_piece = temp_piece;
         return (ChessPiece){colourNONE, typeNONE};
     }
-
+    
     if (start_piece->type == kRook)
     {
         if (is_coordinate_equal(start_coords, (ChessCoordinate){kA, k1}))

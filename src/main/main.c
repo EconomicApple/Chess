@@ -45,10 +45,26 @@ int main(int argc, char* argv[])
                 printf("Invalid move! ");
             }
         }
-        
-        print_who_to_move(&board);
 
-        printf("Enter start and end coordinates, Ctrl+D to end:\n");
+        ChessPieceColour winner;
+
+        if ((winner = is_checkmate(&board)) != colourNONE)
+        {
+            if (winner == kWhite)
+            {
+                printf("Checkmate! White wins!\n");
+                break;
+            }
+            else
+            { 
+                printf("Checkmate! Black wins!\n");
+            }
+        }
+        else
+        {
+            print_who_to_move(&board);
+            printf("Enter start and end coordinates, Ctrl+D to end:\n");
+        }
     }
 
     return 0;

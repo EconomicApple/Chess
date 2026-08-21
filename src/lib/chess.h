@@ -132,8 +132,6 @@ ChessCoordinate shift_hor_coordinate(ChessCoordinate coordinates, int offset);
 
 bool is_coordinate_equal(ChessCoordinate c1, ChessCoordinate c2);
 
-// TODO: implement all the pieces
-
 // Move validations
 
 // Returns typeNONE if invalid, kPawn if valid but cannot promote, kPawnPromotion if can promote
@@ -178,6 +176,9 @@ ChessPieceType is_valid_king_move(ChessBoard* p_board,
 
 bool is_valid_castle(ChessBoard* p_board,
                                 ChessCoordinate end_coords);
+
+// Returns the winner. The king checked is the player whose turn it is to move.
+ChessPieceColour is_checkmate(ChessBoard* p_board);
 
 // Returns true if player is in check and is opponent's turn.
 bool in_illegal_check(ChessBoard* p_board);
