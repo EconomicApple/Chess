@@ -8,7 +8,6 @@ int main(int argc, char* argv[])
     ChessCoordinate_str start_str_coords;
     ChessCoordinate_str end_str_coords;
 
-    // TODO: work on checks
     print_white_board(&board);
 
     printf("White to move! Enter start and end coordinates, Ctrl+D to end:\n");
