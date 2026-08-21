@@ -53,12 +53,13 @@ int main(int argc, char* argv[])
             if (winner == kWhite)
             {
                 printf("Checkmate! White wins!\n");
-                break;
             }
             else
             { 
                 printf("Checkmate! Black wins!\n");
             }
+
+            break;
         }
         else
         {
