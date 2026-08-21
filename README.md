@@ -1,1 +1,1 @@
-C implementation for chess.
+Singleplayer CLI chess.
